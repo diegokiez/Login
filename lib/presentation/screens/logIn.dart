@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:login/controllers/login_controller.dart';
+import 'package:login/presentation/screens/signUp.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
-
-  @override
-  State<Login> createState() => _LoginState();
-}
-
-class _LoginState extends State<Login> {
+class LogIn extends StatelessWidget {
+  final controller = Get.put(LoginController());
   bool? valueCheckBox = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,68 +30,73 @@ class _LoginState extends State<Login> {
           child: Center(
             child: ListView(children: [
               const Padding(
-                padding: EdgeInsets.all(40.0),
+                padding: EdgeInsets.all(50.0),
                 child: Text("Welcome",
                     textAlign: TextAlign.center,
                     style:
-                        TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+                        TextStyle(fontSize: 50, fontWeight: FontWeight.bold)),
               ),
               const Text("Email",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.w500)),
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
               Padding(
                 padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
                 child: TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                        hintText: "Email",
-                        hintStyle: TextStyle(fontSize: 14),
-                        constraints:
-                            BoxConstraints(maxWidth: 250, maxHeight: 40),
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10))))),
+                  keyboardType: TextInputType.emailAddress,
+                  style: const TextStyle(fontSize: 20),
+                  decoration: const InputDecoration(
+                      hintText: "Email",
+                      hintStyle: TextStyle(fontSize: 20),
+                      constraints: BoxConstraints(maxWidth: 250, maxHeight: 50),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)))),
+                  onChanged: controller.handleEmail,
+                ),
               ),
+              const Padding(padding: EdgeInsets.all(15)),
               const Text("Password",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.w500)),
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
               Padding(
                 padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
                 child: TextFormField(
                     obscureText: true,
+                    style: const TextStyle(fontSize: 20),
                     decoration: const InputDecoration(
                         hintText: "Password",
-                        hintStyle: TextStyle(fontSize: 14),
+                        hintStyle: TextStyle(fontSize: 20),
                         constraints:
-                            BoxConstraints(maxWidth: 250, maxHeight: 40),
+                            BoxConstraints(maxWidth: 250, maxHeight: 50),
                         border: OutlineInputBorder(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(10))))),
+                                BorderRadius.all(Radius.circular(10)))),
+                    onChanged: controller.handlePassword),
               ),
               Row(
                 children: [
                   Expanded(
                     child: Center(
                       child: SizedBox(
-                        width: 160,
+                        width: 2000,
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                          padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
                           child: ListTile(
-                              contentPadding: EdgeInsets.all(0),
+                              contentPadding: const EdgeInsets.all(0),
                               title: const Text("Remember me",
                                   style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: 15,
                                   ),
                                   maxLines: 2,
                                   textAlign: TextAlign.right,
                                   overflow: TextOverflow.ellipsis),
-                              trailing: Checkbox(
-                                  value: valueCheckBox,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      valueCheckBox = value;
+                              trailing: GetBuilder<LoginController>(
+                                  builder: (context) {
+                                return Checkbox(
+                                    value: controller.remember,
+                                    onChanged: (value) {
+                                      controller.handleRemember(value!);
                                     });
-                                  })),
+                              })),
                         ),
                       ),
                     ),
@@ -106,36 +109,39 @@ class _LoginState extends State<Login> {
                         onPressed: () {},
                         child: const Text(
                           "Forgot pasword?",
-                          style: TextStyle(color: Colors.blue, fontSize: 12),
+                          style: TextStyle(color: Colors.blue, fontSize: 15),
                         ),
                       ),
                     )),
                   ),
                 ],
               ),
+              const Padding(padding: EdgeInsets.all(15)),
               SizedBox(
                 width: double.infinity,
-                height: 60,
+                height: 70,
                 child: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text("Login in"),
+                  onPressed: () => controller.handleLogin(),
+                  child: const Text("Login in", style: TextStyle(fontSize: 30)),
                 ),
               ),
               const Padding(
-                padding: EdgeInsets.all(5),
-                child: Text("or", textAlign: TextAlign.center),
+                padding: EdgeInsets.all(10),
+                child: Text("or",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 20)),
               ),
               SizedBox(
                 width: double.infinity,
-                height: 60,
+                height: 70,
                 child: ElevatedButton(
                   style: const ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll(
                           Color.fromARGB(255, 85, 85, 85))),
                   onPressed: () {
-                    Navigator.of(context).pushNamed('registro');
+                    Get.to(SingUp());
                   },
-                  child: const Text("Sign up"),
+                  child: const Text("Sign up", style: TextStyle(fontSize: 30)),
                 ),
               ),
             ]),
